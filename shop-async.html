@@ -37,6 +37,24 @@
     //   5. setState with the products and status "ready"
     //   6. on any error (catch): setState with status "error" and err.message
     async function loadProducts() {
+    try{
+      setState({...state,status:"loading",error:""});
+
+      const res = await fakeFetch("/api/products");
+
+      if (!res.ok){
+        throw new Error(`Error ${res.status}`);
+      }
+
+      const products = await res.json();
+
+      setState({...state,products: products,status: "ready",error: ""});
+    }
+
+    catch (err){
+      setState({...state,status: "error",error: err.message});
+    }
+
 
     }
 
